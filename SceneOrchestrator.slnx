@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="SceneOrchestrator.Core/SceneOrchestrator.Core.csproj" />
+  <Project Path="SceneOrchestrator.Tests/SceneOrchestrator.Tests.csproj" />
+  <Project Path="SceneOrchestrator.UI/SceneOrchestrator.UI.csproj" />
+</Solution>
