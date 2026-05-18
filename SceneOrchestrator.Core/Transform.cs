@@ -82,6 +82,27 @@ public class Transform
 
     public Matrix4x4 ViewMatrix()
     {
-        return Matrix4x4.CreateFromQuaternion(Rotation) * Matrix4x4.CreateTranslation(Position);
+        if (Matrix4x4.Invert(ModelMatrix(Matrix4x4.Identity), out var result))
+        {
+            return result;
+        }
+        return Matrix4x4.Identity;
+    }
+
+    public void Translate(Vector3 translation, bool local)
+    {
+        if (local)
+            Position += Vector3.Transform(translation, Rotation);
+        else
+            Position += translation;
+    }
+
+    public void Rotate(Vector3 axis, float angleRadians, bool local = false)
+    {
+        if (local)
+            axis = Vector3.Transform(axis, Rotation);
+
+        var q = Quaternion.CreateFromAxisAngle(Vector3.Normalize(axis), angleRadians);
+        Rotation = Quaternion.Normalize(q * Rotation);
     }
 }
