@@ -10,47 +10,26 @@ public interface ILight
     float Decay { get; set; }
 }
 
-public abstract class Light(
-    string tag,
-    Vector3 position,
-    Quaternion rotation,
-    float intensity,
-    Color color,
-    float decay
-) : SceneNode(tag, position, rotation)
+public enum LightType
 {
-    public float Intensity { get; set; } = intensity;
-    public Color Color { get; set; } = color;
-    public float Decay { get; set; } = decay;
+    Point,
+    Directional,
+    Spot,
 }
-
-public class PointLight(
+public class Light(
     string tag,
     Vector3 position,
     Quaternion rotation,
-    float intensity,
-    Color color,
-    float decay
-) : Light(tag, position, rotation, intensity, color, decay) { }
-
-public class DirectionalLight(
-    string tag,
-    Vector3 position,
-    Quaternion rotation,
-    float intensity,
-    Color color,
-    float decay
-) : Light(tag, position, rotation, intensity, color, decay) { }
-
-public class SpotLight(
-    string tag,
-    Vector3 position,
-    Quaternion rotation,
+    LightType type,
     float intensity,
     Color color,
     float decay,
-    float cutoffAngle
-) : Light(tag, position, rotation, intensity, color, decay)
+    float cutoffAngle = 0.4f
+) : SceneNode(tag, position, rotation), ILight
 {
+    public LightType Type { get; set; } = type;
+    public float Intensity { get; set; } = intensity;
+    public Color Color { get; set; } = color;
+    public float Decay { get; set; } = decay;
     public float CutoffAngle { get; set; } = cutoffAngle;
 }

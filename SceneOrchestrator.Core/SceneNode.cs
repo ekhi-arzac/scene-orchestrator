@@ -1,16 +1,20 @@
+using System.Numerics;
+using System.Text.Json.Serialization;
+
 namespace SceneOrchestrator.Core;
 
-
-
-public class SceneNode
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+[JsonDerivedType(typeof(SceneNode), "SceneNode")]
+[JsonDerivedType(typeof(Camera), "Camera")]
+[JsonDerivedType(typeof(Light), "Light")]
+[JsonDerivedType(typeof(Mesh), "Mesh")]
+public class SceneNode(string tag, Vector3 position, Quaternion rotation)
 {
-    public Transform Transform { get; } = new();
+    public Transform Transform { get; } = new(position, rotation);
     public SceneNode? Parent { get; protected set; }
     public List<SceneNode> Children { get; } = [];
-    public String Tag { get; set; } = "";
 
-    public static int NextID { get; private set; } = 0;
-    public int ID { get; } = NextID++;
+    public string Tag { get; } = tag;
 
     public void AddChild(SceneNode child)
     {
@@ -26,17 +30,6 @@ public class SceneNode
 
     public SceneNode? FindChild(string tag)
     {
-        return FindChild(c => c.Tag == tag);
+        return Children.First(c => c.Tag == tag);
     }
-
-    public SceneNode? FindChild(int id)
-    {
-        return FindChild(c => c.ID == id);
-    }
-
-    public SceneNode? FindChild(Func<SceneNode, bool> predicate)
-    {
-        return Children.FirstOrDefault(predicate);
-    }
-
 }

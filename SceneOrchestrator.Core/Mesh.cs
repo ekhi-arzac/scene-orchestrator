@@ -7,7 +7,7 @@ public interface IMesh
     string MeshPath { get; set; }
 }
 
-public class MeshNode(string tag, Vector3 position, Quaternion rotation, string meshPath)
+public class Mesh(string tag, Vector3 position, Quaternion rotation, string meshPath)
     : SceneNode(tag, position, rotation),
         IMesh
 {

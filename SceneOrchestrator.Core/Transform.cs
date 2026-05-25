@@ -67,6 +67,12 @@ public class Transform
     [JsonConverter(typeof(Vector3Converter))]
     public Vector3 Scale { get; set; } = Vector3.One;
 
+    public Transform(Vector3 position, Quaternion rotation)
+    {
+        Position = position;
+        Rotation = rotation;
+    }
+
     public override string ToString()
     {
         return $"Position: {Position}, Rotation: {Rotation}, Scale: {Scale}";
