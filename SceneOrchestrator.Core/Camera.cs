@@ -14,6 +14,10 @@ public enum CameraType
 interface ICamera
 {
     public CameraType Type { get; }
+
+    /// <summary>
+    /// Builds a view matrix from the camera transform.
+    /// </summary>
     public Matrix4x4 ViewMatrix();
     public Matrix4x4 ProjectionMatrix { get; }
 
@@ -39,11 +43,24 @@ public class Camera(
 {
     public CameraType Type { get; set; } = type;
 
+    /// <summary>
+    /// Builds a view matrix from the camera transform.
+    /// </summary>
     public Matrix4x4 ViewMatrix() => Transform.ViewMatrix();
 
-    public Matrix4x4 ProjectionMatrix => Type == CameraType.Perspective
-        ? Matrix4x4.CreatePerspectiveFieldOfView(FieldOfView, AspectRatio, NearPlane, FarPlane)
-        : Matrix4x4.CreateOrthographic(FieldOfView * AspectRatio, FieldOfView, NearPlane, FarPlane);
+    /// <summary>
+    /// Builds a projection matrix based on the camera type and properties.
+    /// Throws ArgumentOutOfRange exception if near plane is further than far plane, or if field of view is non-positive.
+    /// </summary>
+    public Matrix4x4 ProjectionMatrix =>
+        Type == CameraType.Perspective
+            ? Matrix4x4.CreatePerspectiveFieldOfView(FieldOfView, AspectRatio, NearPlane, FarPlane)
+            : Matrix4x4.CreateOrthographic(
+                FieldOfView * AspectRatio,
+                FieldOfView,
+                NearPlane,
+                FarPlane
+            );
 
     public float FieldOfView { get; set; } = fieldOfView;
     public float NearPlane { get; set; } = nearPlane;
