@@ -47,21 +47,18 @@ The viewport renders:
 - Mesh nodes as plain white unit cubes (no lighting or textures).
 
 #### Persistence
-The scene graph can be saved and loaded as JSON. The Core library ships custom converters for `Vector3`, `Quaternion`, and `Color`, and uses `[JsonPolymorphic]` with a `"type"` discriminator so Camera/Light/Mesh nodes survive a round-trip without losing their type. Parent back-references are skipped during serialisation (`[JsonIgnore]`) and rebuilt afterwards via `RebuildParentLinks()`.
+The scene graph can be saved and loaded as JSON via serialization library (System.Text.Json).
 
 The editor UI doesn't have a load/save dialog yet — serialisation is there as a library feature.
 
 #### Libraries and Technologies
-- **MonoGame** (DesktopGL): windowing, graphics device, `BasicEffect`, vertex/index buffers, render targets.
+- **MonoGame** (DesktopGL): windowing, graphics device, vertex/index buffers, render targets.
 - **ImGui.NET / MonoGame.ImGuiNet**: immediate-mode UI panels and the viewport image widget.
-- **System.Text.Json**: built-in JSON serialisation with custom converters and polymorphic type handling.
+- **System.Text.Json**: built-in JSON serialization with custom converters and polymorphic type handling.
 - **xUnit**: unit test framework.
 
 #### Testing
-30 xUnit tests in `SceneOrchestrator.Tests`, no mocks:
-
-- **TransformTests** (13): model matrix for identity/translation/scale/rotation, parent matrix composition, view matrix is the inverse of model matrix, world- and local-space `Translate`, `Rotate` stays normalised and accumulates correctly, default scale is `Vector3.One`.
-- **SceneNodeTests** (17): `AddChild` sets parent and shows up in children, re-parenting moves the node, `RemoveChild` clears the parent link and returns the right bool, `FindChild` by tag, new nodes start empty, `FindDescendant`/`FindDescendants`/`RemoveDescendant` all traverse the hierarchy correctly.
+30 xUnit tests in `SceneOrchestrator.Tests`.
 
 Run all tests with:
 ```
