@@ -2,6 +2,8 @@
 
 A small desktop 3D scene editor. Build a node hierarchy, tweak transforms, and see the result live in a 3D viewport.
 
+![Scene Orchestrator](./images/screenshot.png)
+
 ## Running
 
 ```
