@@ -35,7 +35,7 @@ Building a 3D scene is a lot easier when you can see the node hierarchy and twea
 - **3D viewport**: live-updating view rendered into an ImGui image with orbit/pan/zoom camera control.
 
 #### UI/UX
-Desktop GUI using MonoGame (OpenGL) with an ImGui overlay. The window opens at 1440×900 with three panels:
+Desktop GUI using MonoGame (OpenGL) with an ImGui overlay. The window opens with three panels:
 
 1. **Scene panel** — collapsible node tree. Each node shows a type prefix (`[CAM]`, `[LIT]`, `[MSH]`, `[NODE]`) and its tag. Buttons at the top add nodes or reset the whole scene.
 2. **Inspector panel** — editable fields for whatever is selected: tag, transform (position/rotation/scale), and type-specific stuff (projection type, FOV, light colour, etc.). Non-root nodes also get a Delete button.
