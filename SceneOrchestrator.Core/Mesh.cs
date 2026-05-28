@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Text.Json.Serialization;
 
 namespace SceneOrchestrator.Core;
 
@@ -20,6 +21,14 @@ public class Mesh(string tag, Vector3 position, Quaternion rotation, string mesh
     : SceneNode(tag, position, rotation),
         IMesh
 {
+    /// <summary>
+    /// Creates a default mesh node for JSON deserialization.
+    /// </summary>
+    [JsonConstructor]
+    public Mesh() : this("Mesh", Vector3.Zero, Quaternion.Identity, "")
+    {
+    }
+
     /// <summary>
     /// Gets or sets the mesh asset path.
     /// </summary>

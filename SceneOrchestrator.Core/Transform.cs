@@ -18,7 +18,44 @@ public class Vector3Converter : JsonConverter<Vector3>
         JsonSerializerOptions options
     )
     {
-        return new Vector3(reader.GetSingle(), reader.GetSingle(), reader.GetSingle());
+        if (reader.TokenType != JsonTokenType.StartObject)
+            throw new JsonException("Expected start of Vector3 object.");
+
+        float x = 0f,
+            y = 0f,
+            z = 0f;
+        while (reader.Read())
+        {
+            if (reader.TokenType == JsonTokenType.EndObject)
+                break;
+            if (reader.TokenType != JsonTokenType.PropertyName)
+                throw new JsonException("Expected property name for Vector3.");
+
+            var name = reader.GetString();
+            if (!reader.Read())
+                throw new JsonException("Unexpected end when reading Vector3.");
+
+            switch (name)
+            {
+                case "x":
+                case "X":
+                    x = reader.GetSingle();
+                    break;
+                case "y":
+                case "Y":
+                    y = reader.GetSingle();
+                    break;
+                case "z":
+                case "Z":
+                    z = reader.GetSingle();
+                    break;
+                default:
+                    reader.Skip();
+                    break;
+            }
+        }
+
+        return new Vector3(x, y, z);
     }
 
     /// <summary>
@@ -48,12 +85,49 @@ public class QuaternionConverter : JsonConverter<Quaternion>
         JsonSerializerOptions options
     )
     {
-        return new Quaternion(
-            reader.GetSingle(),
-            reader.GetSingle(),
-            reader.GetSingle(),
-            reader.GetSingle()
-        );
+        if (reader.TokenType != JsonTokenType.StartObject)
+            throw new JsonException("Expected start of Quaternion object.");
+
+        float x = 0f,
+            y = 0f,
+            z = 0f,
+            w = 0f;
+        while (reader.Read())
+        {
+            if (reader.TokenType == JsonTokenType.EndObject)
+                break;
+            if (reader.TokenType != JsonTokenType.PropertyName)
+                throw new JsonException("Expected property name for Quaternion.");
+
+            var name = reader.GetString();
+            if (!reader.Read())
+                throw new JsonException("Unexpected end when reading Quaternion.");
+
+            switch (name)
+            {
+                case "x":
+                case "X":
+                    x = reader.GetSingle();
+                    break;
+                case "y":
+                case "Y":
+                    y = reader.GetSingle();
+                    break;
+                case "z":
+                case "Z":
+                    z = reader.GetSingle();
+                    break;
+                case "w":
+                case "W":
+                    w = reader.GetSingle();
+                    break;
+                default:
+                    reader.Skip();
+                    break;
+            }
+        }
+
+        return new Quaternion(x, y, z, w);
     }
 
     /// <summary>
@@ -79,22 +153,29 @@ public class QuaternionConverter : JsonConverter<Quaternion>
 /// </summary>
 public class Transform(Vector3 position, Quaternion rotation)
 {
-    [JsonConverter(typeof(Vector3Converter))]
+    /// <summary>
+    /// Creates a default transform for JSON deserialization.
+    /// </summary>
+    [JsonConstructor]
+    public Transform()
+        : this(Vector3.Zero, Quaternion.Identity) { }
+
     /// <summary>
     /// Gets or sets the local position.
     /// </summary>
+    [JsonConverter(typeof(Vector3Converter))]
     public Vector3 Position { get; set; } = position;
 
-    [JsonConverter(typeof(QuaternionConverter))]
     /// <summary>
     /// Gets or sets the local rotation.
     /// </summary>
+    [JsonConverter(typeof(QuaternionConverter))]
     public Quaternion Rotation { get; set; } = rotation;
 
-    [JsonConverter(typeof(Vector3Converter))]
     /// <summary>
     /// Gets or sets the local scale.
     /// </summary>
+    [JsonConverter(typeof(Vector3Converter))]
     public Vector3 Scale { get; set; } = Vector3.One;
 
     /// <summary>

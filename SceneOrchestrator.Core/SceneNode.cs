@@ -16,11 +16,13 @@ public class SceneNode(string tag, Vector3 position, Quaternion rotation)
     /// <summary>
     /// Gets the local transform of the node.
     /// </summary>
-    public Transform Transform { get; } = new(position, rotation);
+    [JsonInclude]
+    public Transform Transform { get; private set; } = new(position, rotation);
 
     /// <summary>
     /// Gets the parent node, or null if this is a root node.
     /// </summary>
+    [JsonIgnore]
     public SceneNode? Parent { get; protected set; }
 
     /// <summary>
@@ -32,6 +34,14 @@ public class SceneNode(string tag, Vector3 position, Quaternion rotation)
     /// Gets or sets the node tag used for identification.
     /// </summary>
     public string Tag { get; set; } = tag;
+
+    /// <summary>
+    /// Creates a default scene node for JSON deserialization.
+    /// </summary>
+    [JsonConstructor]
+    public SceneNode() : this("node", Vector3.Zero, Quaternion.Identity)
+    {
+    }
 
     /// <summary>
     /// Adds a child node and assigns this node as its parent.
@@ -119,5 +129,15 @@ public class SceneNode(string tag, Vector3 position, Quaternion rotation)
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Rebuilds parent links for this node and its descendants.
+    /// </summary>
+    public void RebuildParentLinks(SceneNode? parent = null)
+    {
+        Parent = parent;
+        foreach (var child in Children)
+            child.RebuildParentLinks(this);
     }
 }
