@@ -6,4 +6,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Jarodwr.MonoGameImGuiNet" Version="1.0.0" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.4.1" />
+
+    <ProjectReference Include="..\SceneOrchestrator.Core\SceneOrchestrator.Core.csproj" />
+  </ItemGroup>
+
 </Project>
